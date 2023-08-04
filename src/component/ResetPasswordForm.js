@@ -17,13 +17,7 @@ const ResetPasswordPage = () => {
     e.preventDefault();
 
     try {
-      // // Extract the reset token from the URL
-      // const searchParams = new URLSearchParams(window.location.search);
-      // const token = searchParams.get('token');
-
-      // Make an API call to the backend to verify the reset token
-      
-      await axios.post('http://localhost:5000/auth/reset-password', { token, newPassword: password });
+      await axios.post('https://passwordrest.onrender.com/auth/reset-password', { token, newPassword: password });
       setMessage('Password reset successful.');
     } catch (error) {
       setMessage('Error resetting password. Please try again later.');

@@ -2,8 +2,6 @@ import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
 
-
-
 function App() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -13,7 +11,7 @@ function App() {
 
     try {
       // Make an API call to trigger the email with the reset link
-      await axios.post('http://localhost:5000/auth/forgot-password', { email });
+      await axios.post('https://passwordrest.onrender.com/auth/forgot-password', { email });
       setMessage('Password reset link sent to your email.');
     } catch (error) {
       setMessage('Error sending reset link. Please try again later.');
