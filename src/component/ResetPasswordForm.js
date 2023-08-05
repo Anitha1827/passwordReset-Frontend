@@ -1,26 +1,35 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState } from 'react';
-import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const ResetPasswordPage = () => {
-  const [password, setPassword] = useState('');
+  const { randomString } = useParams();
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [token, setToken ] = useState('');
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenParam = urlParams.get('token');
-    setToken(tokenParam)
-  },[]);
+  const handleSubmit = async () => {
+    if (newPassword === confirmPassword) {
+      try {
+        const response = await fetch(`https://passwordrest.onrender.com/auth/resetpassword/${randomString}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ newPassword }),
+        });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      await axios.post('https://passwordrest.onrender.com/auth/reset-password', { token, newPassword: password });
-      setMessage('Password reset successful.');
-    } catch (error) {
-      setMessage('Error resetting password. Please try again later.');
+        if (response.status === 200) {
+          setMessage("Password reset successful")
+        } else {
+          setMessage("Password reset failed")
+        }
+      } catch (error) {
+        console.error('Error resetting password:', error);
+      }
+    } else {
+      // Show password mismatch error
+      
     }
   };
 
@@ -42,8 +51,8 @@ const ResetPasswordPage = () => {
                   className="form-control"
                   id="password"
                   placeholder="Enter your new password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   required
                 />
               </div>
